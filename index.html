@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskTide</title>
+    <style>
+body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TaskTide</h1>
+        <p> Work is yellow. Personal is red. Fitness is blue.</p>
+        <input type="text" id="task" placeholder="Enter your task">
+        <input type="time" id="startTime">
+        <input type="time" id="endTime">
+        <select id="category">
+            <option value="work">Work</option>
+            <option value="personal">Personal</option>
+            <option value="fitness">Fitness</option>
+            <!-- Add more categories as needed -->
+        </select>
+        
+        <textarea id="details" placeholder="Enter task details"></textarea>
+        <button onclick="addTask()">Add Task</button>
+        <button onclick="clearAllTasks()">Clear All Tasks</button>
+        <ul id="taskList"></ul>
+    </div>
+
+    <script>
+        const tasks = []; // Array to store tasks
+
+        function addTask() {
+            const taskInput = document.getElementById("task");
+            const startTimeInput = document.getElementById("startTime");
+            const endTimeInput = document.getElementById("endTime");
+            const categorySelect = document.getElementById("category");
+            const detailsInput = document.getElementById("details");
+
+            const task = taskInput.value;
+            const startTime = convertTo24HourFormat(startTimeInput.value);
+            const endTime = convertTo24HourFormat(endTimeInput.value);
+            const category = categorySelect.value;
+            const details = detailsInput.value;
+
+            if (task && startTime && endTime) {
+                tasks.unshift({ task, startTime, endTime, category, details }); // Add task to the beginning of the array
+                renderTasks(); // Update the displayed tasks
+                clearInputFields();
+            }
+        }
+
+        function renderTasks() {
+            const taskList = document.getElementById("taskList");
+            taskList.innerHTML = ""; // Clear existing tasks
+
+            tasks.forEach(({ task, startTime, endTime, category, details }, index) => {
+                const listItem = document.createElement("li");
+                listItem.textContent = `${task} (${startTime} - ${endTime})   `;
+                listItem.style.backgroundColor = getCategoryColor(category);
+
+                const detailsButton = document.createElement("button");
+                detailsButton.textContent = "Show Details";
+                detailsButton.onclick = () => alert(details);
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "Delete";
+                deleteButton.style.marginLeft="10px"
+                deleteButton.onclick = () => deleteTask(index);
+
+                listItem.appendChild(detailsButton);
+                listItem.appendChild(deleteButton);
+                taskList.appendChild(listItem);
+            });
+        }
+
+        // Rest of the functions (convertTo24HourFormat, clearAllTasks, etc.) remain unchanged
+
+        // ...
+       
+
+
+        function deleteTask(index) {
+            tasks.splice(index, 1); // Remove task at the specified index
+            renderTasks(); // Update the displayed tasks
+        }
+
+        function clearAllTasks() {
+            tasks.length = 0; // Clear all tasks
+            renderTasks(); // Update the displayed tasks
+        }
+
+        function convertTo24HourFormat(time) {
+            const [hours, minutes] = time.split(":");
+            const isPM = time.toLowerCase().includes("pm");
+
+            let hourValue = parseInt(hours, 10);
+            if (isPM && hourValue !== 12) {
+                hourValue += 12;
+            } else if (!isPM && hourValue === 12) {
+                hourValue = 0;
+            }
+
+            return `${hourValue.toString().padStart(2, "0")}:${minutes}`;
+        }
+
+        function clearInputFields() {
+            document.getElementById("task").value = "";
+            document.getElementById("startTime").value = "";
+            document.getElementById("endTime").value = "";
+        }
+
+        function getCategoryColor(category) {
+            // Define color mappings for each category
+            switch (category) {
+                case "work":
+                    return "#FFD700"; // Yellow
+                case "personal":
+                    return "#FF6347"; // Tomato
+                case "fitness":
+                    return "#00BFFF"; // Deep Sky Blue
+                // Add more cases for additional categories
+                default:
+                    return "#FFFFFF"; // Default color (white)
+            }
+        }
+    </script>
+</body>
+</html>
