@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaskTide</title>
+    <title>ChronoTaskPlanner</title>
+    <link rel="icon" href="Logo.jpeg">
     <style>
 body {
             font-family: Arial, sans-serif;
@@ -36,7 +37,7 @@ body {
 </head>
 <body>
     <div class="container">
-        <h1>TaskTide</h1>
+        <h1>ChronoTaskPlanner</h1>
         <p> Work is yellow. Personal is red. Fitness is blue.</p>
         <input type="text" id="task" placeholder="Enter your task">
         <input type="time" id="startTime">
@@ -57,7 +58,7 @@ body {
     <script>
         const tasks = []; // Array to store tasks
 
-  function addTask() {
+        function addTask() {
             const taskInput = document.getElementById("task");
             const startTimeInput = document.getElementById("startTime");
             const endTimeInput = document.getElementById("endTime");
@@ -77,6 +78,7 @@ body {
                 clearInputFields();
             }
         }
+
         function renderTasks() {
             const taskList = document.getElementById("taskList");
             taskList.innerHTML = ""; // Clear existing tasks
